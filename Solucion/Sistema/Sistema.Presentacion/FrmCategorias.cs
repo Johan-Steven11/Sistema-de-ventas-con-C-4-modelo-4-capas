@@ -19,6 +19,7 @@ namespace Sistema.Presentacion
         {
             InitializeComponent();
         }
+        #region Listar 
         private void Listar() 
         {
             try
@@ -34,7 +35,8 @@ namespace Sistema.Presentacion
             }
         
         }
-
+        #endregion
+        #region Buscar
         private void Buscar() 
         {
             try
@@ -49,6 +51,8 @@ namespace Sistema.Presentacion
             }
 
         }
+        #endregion
+        #region Formato
         private void Formato() 
         {
             DgvListado.Columns[0].Visible = false;
@@ -58,6 +62,8 @@ namespace Sistema.Presentacion
             DgvListado.Columns[3].HeaderText = "Descripción";
             DgvListado.Columns[4].Width = 100;
         }
+        #endregion
+        #region Limpiar
         private void Limpiar() {
 
             TxtBuscar.Clear();
@@ -73,6 +79,8 @@ namespace Sistema.Presentacion
             btnEliminar.Visible = false;
             chkSeleccionar.Checked = false;
         }
+        #endregion
+        #region Mensajes de error
         private void MensajeError(string Mensaje)
         {
             MessageBox.Show(Mensaje, "Sistemas de Ventas", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -81,6 +89,8 @@ namespace Sistema.Presentacion
         {
             MessageBox.Show(Mensaje, "Sistemas de Ventas", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        #endregion
+        
         private void FrmCategorias_Load(object sender, EventArgs e)
         {
             Listar();
@@ -90,7 +100,7 @@ namespace Sistema.Presentacion
         {
             this.Buscar();
         }
-
+        #region Insertar
         private void btnInsertar_Click(object sender, EventArgs e)
         {
             try
@@ -124,6 +134,7 @@ namespace Sistema.Presentacion
             }
 
         }
+        #endregion
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
@@ -319,6 +330,61 @@ namespace Sistema.Presentacion
 
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtBuscar_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtTotal_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TabGeneral_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtID_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtDescripcion_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtNombre_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

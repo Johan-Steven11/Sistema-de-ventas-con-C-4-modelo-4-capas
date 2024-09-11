@@ -11,19 +11,21 @@ namespace Sistema.Negocio
 {
     public class NCategoria
     {
-        
+        #region Listar
         public static DataTable Listar() 
         {
             DCategoria Datos = new DCategoria();
             return Datos.listar();
         }
-
+        #endregion
+        #region Buscar
         public static DataTable Buscar(string valor)
         {
             DCategoria Datos = new DCategoria();
             return Datos.Buscar(valor);
         }
-
+        #endregion
+        #region Insertar
         public static string Insertar(string Nombre, string Descripcion) 
         {
             DCategoria Datos = new DCategoria();
@@ -41,7 +43,8 @@ namespace Sistema.Negocio
                 return Datos.Insertar(objC);
             }
         }
-
+        #endregion
+        #region Actualizar
         public static string Actualizar(int id, string NombreAnt, string Nombre, string Descripcion) 
         {
 
@@ -72,12 +75,13 @@ namespace Sistema.Negocio
                 }
             }
         }
-
+        #region Eliminar
         public static string Eliminar(int id)
         {
             DCategoria Datos = new DCategoria();
             return Datos.Eliminar(id);
         }
+        #endregion
         public static string DesActivar(int id)
         {
             DCategoria Datos = new DCategoria();

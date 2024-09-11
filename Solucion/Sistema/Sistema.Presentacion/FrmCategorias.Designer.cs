@@ -67,6 +67,7 @@
             this.TabGeneral.SelectedIndex = 0;
             this.TabGeneral.Size = new System.Drawing.Size(1026, 499);
             this.TabGeneral.TabIndex = 0;
+            this.TabGeneral.SelectedIndexChanged += new System.EventHandler(this.TabGeneral_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -85,6 +86,7 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Listado";
             this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
             // btnEliminar
             // 
@@ -143,6 +145,7 @@
             this.TxtBuscar.Name = "TxtBuscar";
             this.TxtBuscar.Size = new System.Drawing.Size(491, 20);
             this.TxtBuscar.TabIndex = 2;
+            this.TxtBuscar.TextChanged += new System.EventHandler(this.TxtBuscar_TextChanged);
             // 
             // TxtTotal
             // 
@@ -152,6 +155,7 @@
             this.TxtTotal.Size = new System.Drawing.Size(100, 20);
             this.TxtTotal.TabIndex = 1;
             this.TxtTotal.Text = "Total: ";
+            this.TxtTotal.TextChanged += new System.EventHandler(this.TxtTotal_TextChanged);
             // 
             // DgvListado
             // 
@@ -194,6 +198,7 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Mantenimineto";
             this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage2.Click += new System.EventHandler(this.tabPage2_Click);
             // 
             // btnActualizar
             // 
@@ -213,6 +218,7 @@
             this.label3.Size = new System.Drawing.Size(170, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "(*) Indica que el dato es obligatorio";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // btnCancelar
             // 
@@ -241,6 +247,7 @@
             this.txtID.Size = new System.Drawing.Size(138, 20);
             this.txtID.TabIndex = 4;
             this.txtID.Visible = false;
+            this.txtID.TextChanged += new System.EventHandler(this.txtID_TextChanged);
             // 
             // TxtDescripcion
             // 
@@ -249,6 +256,7 @@
             this.TxtDescripcion.Name = "TxtDescripcion";
             this.TxtDescripcion.Size = new System.Drawing.Size(301, 94);
             this.TxtDescripcion.TabIndex = 3;
+            this.TxtDescripcion.TextChanged += new System.EventHandler(this.TxtDescripcion_TextChanged);
             // 
             // TxtNombre
             // 
@@ -256,6 +264,7 @@
             this.TxtNombre.Name = "TxtNombre";
             this.TxtNombre.Size = new System.Drawing.Size(301, 20);
             this.TxtNombre.TabIndex = 2;
+            this.TxtNombre.TextChanged += new System.EventHandler(this.TxtNombre_TextChanged);
             // 
             // label2
             // 
@@ -265,6 +274,7 @@
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Descripción";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -274,6 +284,7 @@
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre (*)";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // ErrorIcono
             // 
