@@ -65,6 +65,34 @@ namespace Sistema.Datos
 
         }
         #endregion
+        #region Metodo Seleccionar
+        public DataTable Seleccionar()
+        {
+            SqlDataReader Resultado;
+            DataTable Tabla = new DataTable();
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon = Conexion.getIntancia().CrearConexion();
+                SqlCommand comando = new SqlCommand("categoria_seleccionar", sqlCon);
+                comando.CommandType = CommandType.StoredProcedure;
+                sqlCon.Open();
+                Resultado = comando.ExecuteReader();
+                Tabla.Load(Resultado);
+                return Tabla;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open) sqlCon.Close();
+            }
+
+        }
+        #endregion
         #region Metodo validar existencia 
         public string Existe(string valor)
         {

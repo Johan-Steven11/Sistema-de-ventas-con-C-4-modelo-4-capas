@@ -25,6 +25,13 @@ namespace Sistema.Negocio
             return Datos.Buscar(valor);
         }
         #endregion
+        #region Seleccionar
+        public static DataTable Seleccionar()
+        {
+            DCategoria Datos = new DCategoria();
+            return Datos.Seleccionar();
+        }
+        #endregion
         #region Insertar
         public static string Insertar(string Nombre, string Descripcion) 
         {
@@ -75,6 +82,7 @@ namespace Sistema.Negocio
                 }
             }
         }
+        #endregion
         #region Eliminar
         public static string Eliminar(int id)
         {
@@ -82,16 +90,19 @@ namespace Sistema.Negocio
             return Datos.Eliminar(id);
         }
         #endregion
+        #region Desactivar
         public static string DesActivar(int id)
         {
             DCategoria Datos = new DCategoria();
             return Datos.Desactivar(id);
         }
+        #endregion
+        #region
         public static string Activar(int id)
         {
             DCategoria Datos = new DCategoria();
             return Datos.Activar(id);
         }
-
+        #endregion
     }
 }

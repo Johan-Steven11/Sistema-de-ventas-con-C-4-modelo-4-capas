@@ -260,39 +260,7 @@ namespace Sistema.Presentacion
 
         private void btnActivar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DialogResult Opcion;
-                Opcion = MessageBox.Show("¿Desea Activar el(los) registro(s)?", "Sistema de ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                if (Opcion == DialogResult.OK)
-                {
-                    int codigo;
-                    string Rpta = "";
 
-                    foreach (DataGridViewRow row in DgvListado.Rows)
-                    {
-                        if (Convert.ToBoolean(row.Cells[0].Value))
-                        {
-                            codigo = Convert.ToInt32(row.Cells[1].Value);
-                            Rpta = NCategoria.Activar(codigo);
-                            if (Rpta.Equals("OK"))
-                            {
-                                this.MensajeOK("Se Activó el registro:" + row.Cells[2].Value.ToString());
-                            }
-                            else
-                            {
-                                this.MensajeError(Rpta);
-                            }
-                        }
-                    }
-                    this.Listar();
-                }
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message + ex.StackTrace);
-            }
         }
 
         private void btnDesactivar_Click(object sender, EventArgs e)
