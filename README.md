@@ -52,4 +52,5 @@ El proyecto sigue el patrón de **modelo de 4 capas**, dividiendo la aplicación
    git clone https://github.com/tu-usuario/gestion-ventas.git
    
 2. Descarga los íconos: La carpeta Icons que contiene los íconos necesarios para el aplicativo no está incluida en el repositorio. Debes descargarla desde el siguiente enlace y colocarla en el directorio raíz del proyecto(Solucion):
--[https://drive.google.com/drive/folders/1YoPVv27IOjtK9dfCQYMLRlAnb0hXNM26?usp=sharing]
+-Icons](https://drive.google.com/drive/folders/1YoPVv27IOjtK9dfCQYMLRlAnb0hXNM26?usp=sharing).
+3. Ejecucion de Script SQL: En la carpeta SQLScript se encontra el archivo BDSistema.sql con todo el script de la BD
