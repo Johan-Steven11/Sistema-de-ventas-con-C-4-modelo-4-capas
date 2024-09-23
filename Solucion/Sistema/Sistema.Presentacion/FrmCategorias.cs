@@ -106,7 +106,7 @@ namespace Sistema.Presentacion
             try
             {
                 string Rpta = "";
-                if (TxtNombre.Text == String.Empty)
+                if (TxtNombre.Text == string.Empty)
                 {
                     MensajeError("Falta ingresar algunos datos, serán remarcados");
                     ErrorIcono.SetError(TxtNombre, "Ingrese un nombre");
@@ -299,6 +299,10 @@ namespace Sistema.Presentacion
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
         }
+        private void btnActivar_Click_1(object sender, EventArgs e)
+        {
+
+        }
 
         private void tabPage1_Click(object sender, EventArgs e)
         {
@@ -354,5 +358,7 @@ namespace Sistema.Presentacion
         {
 
         }
+
+        
     }
 }
