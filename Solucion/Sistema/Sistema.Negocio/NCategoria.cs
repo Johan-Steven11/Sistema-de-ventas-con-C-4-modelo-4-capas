@@ -97,12 +97,13 @@ namespace Sistema.Negocio
             return Datos.Desactivar(id);
         }
         #endregion
-        #region
+        #region Activar
         public static string Activar(int id)
         {
             DCategoria Datos = new DCategoria();
             return Datos.Activar(id);
         }
         #endregion
+
     }
 }

@@ -13,6 +13,11 @@ namespace Sistema.Presentacion
     public partial class FrmPrincipal : Form
     {
         private int childFormNumber = 0;
+        public int IdUsuario;
+        public int IdRol;
+        public string Nombre;
+        public string Rol;
+        public bool Estado;
 
         public FrmPrincipal()
         {
@@ -116,6 +121,66 @@ namespace Sistema.Presentacion
             FrmArticulo frm = new FrmArticulo();
             frm.MdiParent = this;
             frm.Show();
+        }
+
+        private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmRol frm = new FrmRol();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmUsuarios frm = new FrmUsuarios();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void FrmPrincipal_Load(object sender, EventArgs e)
+        {
+            StBarraInferior.Text = "Desarrollado por Johan Steven Salazar Franco, Usuario: " + this.Nombre;
+            MessageBox.Show("Bienvenido: " + this.Nombre, "Sistema de ventas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+            switch (this.Rol)
+            {
+                case "Administrador":
+                    MnuAlmacen.Enabled = true;
+                    MnuIngresos.Enabled = true;
+                    MnuVentas.Enabled = true;
+                    MnuAccesos.Enabled = true;
+                    MnuConsultas.Enabled = true;
+                    TsCompras.Enabled = true;
+                    TsVentas.Enabled = true;
+                    break;
+                case "Vendedor":
+                    MnuConsultas.Enabled = true;
+                    MnuVentas.Enabled = true;
+                    TsVentas.Enabled= true;
+                    break;
+                case "Almacenero":
+                    MnuAlmacen.Enabled= true;
+                    MnuIngresos.Enabled= true;
+                    MnuConsultas .Enabled = true;
+                    TsCompras.Enabled = true;   
+                    break;
+               
+            }
+            
+        }
+
+        private void FrmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult Opcion = MessageBox.Show("Desea salir del sistema", "Sistema de Ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (Opcion == DialogResult.OK) {
+             Application.Exit();
+            }
         }
     }
 }

@@ -1,30 +1,22 @@
-﻿using System; 
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sistema.Negocio;
+using System;
 using System.Windows.Forms;
-using Sistema.Negocio;
 
 namespace Sistema.Presentacion
 {
-    public partial class FrmCategorias : Form
+    public partial class FrmUsuarios : Form
     {
-
-        private string NombreAnt;
-        public FrmCategorias()
+        private string EmailAnt;
+        public FrmUsuarios()
         {
             InitializeComponent();
         }
         #region Listar 
-        private void Listar() 
+        private void Listar()
         {
             try
             {
-                DgvListado.DataSource = NCategoria.Listar();
+                DgvListado.DataSource = NUsuario.Listar();
                 this.Formato();
                 this.Limpiar();
                 TxtTotal.Text = "Total: " + DgvListado.Rows.Count.ToString();
@@ -33,15 +25,15 @@ namespace Sistema.Presentacion
             {
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
-        
+
         }
         #endregion
         #region Buscar
-        private void Buscar() 
+        private void Buscar()
         {
             try
             {
-                DgvListado.DataSource = NCategoria.Buscar(TxtBuscar.Text);
+                DgvListado.DataSource = NUsuario.Buscar(TxtBuscar.Text);
                 this.Formato();
                 TxtTotal.Text = TxtTotal.Text + DgvListado.Rows.Count.ToString();
             }
@@ -53,22 +45,36 @@ namespace Sistema.Presentacion
         }
         #endregion
         #region Formato
-        private void Formato() 
+        private void Formato()
         {
             DgvListado.Columns[0].Visible = false;
-            DgvListado.Columns[1].Visible = false;
-            DgvListado.Columns[2].Width = 150;
-            DgvListado.Columns[3].Width = 400;
-            DgvListado.Columns[3].HeaderText = "Descripción";
-            DgvListado.Columns[4].Width = 100;
+            DgvListado.Columns[2].Visible = false;
+            DgvListado.Columns[1].Width = 50;
+            DgvListado.Columns[3].Width = 100;
+            DgvListado.Columns[4].Width = 170;
+            DgvListado.Columns[5].Width = 100;
+            DgvListado.Columns[5].HeaderText = "Documento";
+            DgvListado.Columns[6].Width = 100;
+            DgvListado.Columns[6].HeaderText = "Numero Documento";
+            DgvListado.Columns[7].Width = 120;
+            DgvListado.Columns[7].HeaderText = "Direccion";
+            DgvListado.Columns[8].Width = 100;
+            DgvListado.Columns[8].HeaderText = "Telefono";
+            DgvListado.Columns[9].Width = 120;
         }
         #endregion
         #region Limpiar
-        private void Limpiar() {
+        private void Limpiar()
+        {
 
             TxtBuscar.Clear();
             TxtNombre.Clear();
-            TxtDescripcion.Clear();
+            TxtDireccion.Clear();
+            TxtEmail.Clear();
+            TxtTelefono.Clear();
+            txtID.Clear();
+            TxtNumeroDocumento.Clear();
+            TxtClave.Clear();
             btnInsertar.Visible = true;
             btnActualizar.Visible = false;
             ErrorIcono.Clear();
@@ -89,96 +95,53 @@ namespace Sistema.Presentacion
         {
             MessageBox.Show(Mensaje, "Sistemas de Ventas", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        #endregion
-        
-        private void FrmCategorias_Load(object sender, EventArgs e)
+        private void CargarRol() 
         {
-            Listar();
+            try
+            {
+                CboRol.DataSource = NRol.Listar();
+                CboRol.ValueMember = "id_rol";
+                CboRol.DisplayMember = "nombre";
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace);
+            }
+        
+        }
+        #endregion
+        private void FrmUsuarios_Load(object sender, EventArgs e)
+        {
+            this.Listar();
+            this.CargarRol();
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             this.Buscar();
         }
-        #region Insertar
+
         private void btnInsertar_Click(object sender, EventArgs e)
         {
             try
             {
                 string Rpta = "";
-                if (TxtNombre.Text == string.Empty)
+                if (CboRol.Text == string.Empty || TxtNombre.Text == string.Empty || TxtEmail.Text == string.Empty || TxtClave.Text == string.Empty)
                 {
-                    MensajeError("Falta ingresar algunos datos, serán remarcados");
-                    ErrorIcono.SetError(TxtNombre, "Ingrese un nombre");
-                }
-                else 
-                {
-                    Rpta = NCategoria.Insertar(TxtNombre.Text.Trim(),TxtDescripcion.Text.Trim());
-                    if (Rpta.Equals("OK"))
-                    {
-                        this.MensajeOK("Se inserto de forma correcta el registro");
-                        this.Limpiar();
-                        this.Listar();
-                    }
-                    else {
-                        this.MensajeError(Rpta);
-                    
-                    }
-
-                }
-
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show(ex.Message + ex.StackTrace);
-            }
-
-        }
-        #endregion
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Limpiar();
-            TabGeneral.SelectedIndex = 0;
-        }
-
-        private void DgvListado_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                this.Limpiar();
-                btnActualizar.Visible = true;
-                btnInsertar.Visible = false;
-                this.NombreAnt = DgvListado.CurrentRow.Cells["Nombre"].Value.ToString();
-                txtID.Text = DgvListado.CurrentRow.Cells["ID"].Value.ToString();
-                TxtNombre.Text = DgvListado.CurrentRow.Cells["Nombre"].Value.ToString();
-                TxtDescripcion.Text = DgvListado.CurrentRow.Cells["Descripcion"].Value.ToString();
-                TabGeneral.SelectedIndex = 1;
-            }
-            catch (Exception) {
-
-                MessageBox.Show("Seleccione desde la celda Nombre");
-            }
-
-        }
-
-        private void btnActualizar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string Rpta = "";
-                if (TxtNombre.Text == string.Empty || txtID.Text == string.Empty)
-                {
-                    MensajeError("Falta ingresar algunos datos, serán remarcados");
-                    ErrorIcono.SetError(TxtNombre, "Ingrese un nombre");
+                    MensajeError("Falta ingresar algunos datos, serán remarcados.");
+                    ErrorIcono.SetError(CboRol, "Seleccione un rol.");
+                    ErrorIcono.SetError(TxtNombre, "Ingrese un nombre.");
+                    ErrorIcono.SetError(TxtEmail, "Ingrese un Email.");
+                    ErrorIcono.SetError(TxtClave, "Ingrese una Clave de acceso.");
                 }
                 else
                 {
-                    Rpta = NCategoria.Actualizar(Convert.ToInt32(txtID.Text),this.NombreAnt,TxtNombre.Text.Trim(), TxtDescripcion.Text.Trim());
+                    Rpta = NUsuario.Insertar(Convert.ToInt32(CboRol.SelectedValue),TxtNombre.Text.Trim(),CboTipoDocumento.Text,TxtNumeroDocumento.Text.Trim(),TxtDireccion.Text.Trim(),TxtTelefono.Text.Trim(),TxtEmail.Text.Trim(),TxtClave.Text.Trim());
+
                     if (Rpta.Equals("OK"))
                     {
-                        this.MensajeOK("Se actualizó de forma correcta el registro");
-                        this.Limpiar();
+                        this.MensajeOK("Se inserto de forma correcta el registro");
+                        
                         this.Listar();
                     }
                     else
@@ -196,6 +159,85 @@ namespace Sistema.Presentacion
             }
         }
 
+        private void DgvListado_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                this.Limpiar();
+                btnActualizar.Visible = true;
+                btnInsertar.Visible = false;
+                txtID.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Id"].Value);
+                CboRol.SelectedValue = Convert.ToString(DgvListado.CurrentRow.Cells["id_rol"].Value);
+                TxtNombre.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Nombre"].Value);
+                CboTipoDocumento.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Tipo_documento"].Value);
+                TxtNumeroDocumento.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Numero_Documento"].Value);
+                TxtDireccion.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Direccion"].Value);
+                TxtTelefono.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Telefono"].Value);
+                this.EmailAnt = Convert.ToString(DgvListado.CurrentRow.Cells["Email"].Value);
+                TxtEmail.Text = Convert.ToString(DgvListado.CurrentRow.Cells["Email"].Value);
+                TabGeneral.SelectedIndex = 1;
+
+            } catch (Exception ex) {
+
+                MessageBox.Show("Seleccione desde la celda Nombre." + "| Error: " + ex.Message);
+            
+            }
+
+        }
+
+        private void btnActualizar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string Rpta = "";
+                if (txtID.Text == string.Empty || CboRol.Text == string.Empty || TxtNombre.Text == string.Empty || TxtEmail.Text == string.Empty)
+                {
+                    MensajeError("Falta ingresar algunos datos, serán remarcados.");
+                    ErrorIcono.SetError(CboRol, "Seleccione un rol.");
+                    ErrorIcono.SetError(TxtNombre, "Ingrese un nombre.");
+                    ErrorIcono.SetError(TxtEmail, "Ingrese un Email.");
+                    ErrorIcono.SetError(TxtClave, "Ingrese una Clave de acceso.");
+                }
+                else
+                {
+                    Rpta = NUsuario.Actualizar(Convert.ToInt32(txtID.Text),Convert.ToInt32(CboRol.SelectedValue),TxtNombre.Text.Trim(), CboTipoDocumento.Text, TxtNumeroDocumento.Text.Trim(), TxtDireccion.Text.Trim(), TxtTelefono.Text.Trim(), this.EmailAnt ,TxtEmail.Text.Trim(), TxtClave.Text.Trim());
+
+                    if (Rpta.Equals("OK"))
+                    {
+                        this.MensajeOK("Se Actualizo de forma correcta el registro");
+
+                        this.Listar();
+                    }
+                    else
+                    {
+                        this.MensajeError(Rpta);
+
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace);
+            }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Limpiar();
+            TabGeneral.SelectedIndex = 0;
+        }
+
+        private void DgvListado_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == DgvListado.Columns["Seleccionar"].Index)
+            {
+                DataGridViewCheckBoxCell chkEliminar = (DataGridViewCheckBoxCell)DgvListado.Rows[e.RowIndex].Cells["Seleccionar"];
+                chkEliminar.Value = !Convert.ToBoolean(chkEliminar.Value);
+            }
+        }
+
         private void chkSeleccionar_CheckedChanged(object sender, EventArgs e)
         {
             if (chkSeleccionar.Checked)
@@ -205,7 +247,8 @@ namespace Sistema.Presentacion
                 btnDesactivar.Visible = true;
                 btnEliminar.Visible = true;
             }
-            else {
+            else
+            {
                 DgvListado.Columns[0].Visible = false;
                 btnActivar.Visible = false;
                 btnDesactivar.Visible = false;
@@ -214,37 +257,29 @@ namespace Sistema.Presentacion
             }
         }
 
-        private void DgvListado_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == DgvListado.Columns["Seleccionar"].Index) 
-            {
-                DataGridViewCheckBoxCell chkEliminar = (DataGridViewCheckBoxCell)DgvListado.Rows[e.RowIndex].Cells["Seleccionar"];
-                chkEliminar.Value = !Convert.ToBoolean(chkEliminar.Value);
-            }
-        }
-
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             try
             {
                 DialogResult Opcion;
-                Opcion = MessageBox.Show("¿Desea eliminar el(los) registro(s)?","Sistema de ventas", MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
-                if (Opcion == DialogResult.OK) 
+                Opcion = MessageBox.Show("¿Desea eliminar el(los) registro(s)?", "Sistema de ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (Opcion == DialogResult.OK)
                 {
                     int codigo;
                     string Rpta = "";
 
-                    foreach (DataGridViewRow row in DgvListado.Rows) 
+                    foreach (DataGridViewRow row in DgvListado.Rows)
                     {
-                        if (Convert.ToBoolean( row.Cells[0].Value)) 
+                        if (Convert.ToBoolean(row.Cells[0].Value))
                         {
                             codigo = Convert.ToInt32(row.Cells[1].Value);
-                            Rpta = NCategoria.Eliminar(codigo);
+                            Rpta = NUsuario.Eliminar(codigo);
                             if (Rpta.Equals("OK"))
                             {
-                                this.MensajeOK("Se eliminó el registro:" + row.Cells[2].Value.ToString());
+                                this.MensajeOK("Se eliminó el registro:" + row.Cells[4].Value.ToString());
                             }
-                            else {
+                            else
+                            {
                                 this.MensajeError(Rpta);
                             }
                         }
@@ -252,15 +287,11 @@ namespace Sistema.Presentacion
                     this.Listar();
                 }
             }
-            catch (Exception ex) {
-            
-            MessageBox.Show(ex.Message + ex.StackTrace);
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message + ex.StackTrace);
             }
-        }
-
-        private void btnActivar_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnDesactivar_Click(object sender, EventArgs e)
@@ -268,7 +299,7 @@ namespace Sistema.Presentacion
             try
             {
                 DialogResult Opcion;
-                Opcion = MessageBox.Show("¿Desea Desactivar  el(los) registro(s)?", "Sistema de ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                Opcion = MessageBox.Show("¿Desea desactivar el(los) registro(s)?", "Sistema de ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (Opcion == DialogResult.OK)
                 {
                     int codigo;
@@ -279,10 +310,10 @@ namespace Sistema.Presentacion
                         if (Convert.ToBoolean(row.Cells[0].Value))
                         {
                             codigo = Convert.ToInt32(row.Cells[1].Value);
-                            Rpta = NCategoria.DesActivar(codigo);
+                            Rpta = NUsuario.DesActivar(codigo);
                             if (Rpta.Equals("OK"))
                             {
-                                this.MensajeOK("Se Desactivó el registro:" + row.Cells[2].Value.ToString());
+                                this.MensajeOK("Se desactivo el registro:" + row.Cells[4].Value.ToString());
                             }
                             else
                             {
@@ -299,12 +330,13 @@ namespace Sistema.Presentacion
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
         }
-        private void btnActivar_Click_1(object sender, EventArgs e)
+
+        private void btnActivar_Click(object sender, EventArgs e)
         {
             try
             {
                 DialogResult Opcion;
-                Opcion = MessageBox.Show("¿Desea Activar  el(los) registro(s)?", "Sistema de ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                Opcion = MessageBox.Show("¿Desea Activar el(los) registro(s)?", "Sistema de ventas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (Opcion == DialogResult.OK)
                 {
                     int codigo;
@@ -315,10 +347,10 @@ namespace Sistema.Presentacion
                         if (Convert.ToBoolean(row.Cells[0].Value))
                         {
                             codigo = Convert.ToInt32(row.Cells[1].Value);
-                            Rpta = NCategoria.Activar(codigo);
+                            Rpta = NUsuario.Activar(codigo);
                             if (Rpta.Equals("OK"))
                             {
-                                this.MensajeOK("Se Activo el registro:" + row.Cells[2].Value.ToString());
+                                this.MensajeOK("Se activó el registro:" + row.Cells[4].Value.ToString());
                             }
                             else
                             {
@@ -335,62 +367,5 @@ namespace Sistema.Presentacion
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
         }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TxtBuscar_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TxtTotal_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TabGeneral_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtID_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TxtDescripcion_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TxtNombre_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        
     }
 }

@@ -1,4 +1,5 @@
 --create database dbsistema
+create database dbsistema
 use dbsistema
 -- Tabla categoría 
 
@@ -7,7 +8,6 @@ create table categoria (
 	nombre varchar(50) not null unique,
 	descripcion varchar(255) null, 
 	estado bit default(1)
-
 );
 
 go 
@@ -293,7 +293,7 @@ create proc articulo_actualizar
 @descripcion varchar(255),
 @imagen varchar(20)
 as 
-update articulo set idcategoria = @idcategoria, codigo=@codigo, nombre=@codigo, precio_venta=@precio_venta, 
+update articulo set idcategoria = @idcategoria, codigo=@codigo, nombre=@nombre, precio_venta=@precio_venta, 
 stock=@stock, descripcion=@descripcion, imagen=@imagen where idarticulo=@idarticulo
 go
 
@@ -331,3 +331,149 @@ else
 	begin
 		set @existe=0
 	end
+
+
+
+	--Insertar Roles
+
+
+	insert into rol (nombre) values ('Administrador');
+	insert into rol (nombre) values ('Vendedor');
+	insert into rol (nombre) values ('Almacenero');
+
+
+	---Procedimientos almacenados Roles----
+
+	-------Procedimiento Listar----
+	go
+	create procedure Listar_Rol 
+	as
+	select id_rol,nombre from rol where estado = 1
+	go
+
+
+	---Procedimientos almacenados Usuarios---
+	---Procedimineto Listar---
+	create procedure Usuario_Listar
+	as 
+	select u.id_usuario as Id, u.idrol as Id_Rol, 
+	r.nombre as Rol, 
+	u.nombre as  Nombre,
+	u.tipo_documento as Tipo_Documento,
+	u.num_documento as Numero_Documento,
+	u.direccion as Direccion,
+	u.telefono as Telefono,
+	u.email as Email,
+	u.estado as Estado from usuario u inner join rol r on u.idrol=r.id_rol
+	order by u.id_usuario desc
+	go
+	---Procedimineto Buscar---
+	create procedure Usuario_Buscar
+	@Valor varchar(50)
+	as 
+	select u.id_usuario as Id, u.idrol as Id_Rol, 
+	r.nombre as Rol, 
+	u.nombre as  Nombre,
+	u.tipo_documento as Tipo_Documento,
+	u.num_documento as Numero_Documento,
+	u.direccion as Direccion,
+	u.telefono as Telefono,
+	u.email as Email,
+	u.estado as Estado from usuario u inner join rol r on u.idrol=r.id_rol
+	where u.nombre like '%' +@Valor + '%' Or u.email like '%' +@Valor + '%'
+	order by u.nombre asc
+	go
+	---Procedimineto Insertar---
+	create procedure Usuario_Insertar
+	@IdRol integer,
+	@Nombre varchar(100),
+	@Tipo_documento varchar(20),
+	@Num_Documento varchar(20),
+	@Direccion varchar(70),
+	@Telefono varchar(20),
+	@Email varchar(50),
+	@Clave varchar(50)
+	as
+	insert into usuario (idrol,nombre,tipo_documento,num_documento,direccion,telefono,email,clave)
+	values(@IdRol,@Nombre,@Tipo_documento,@Num_Documento,@Direccion,@Telefono,@Email,HASHBYTES('SHA2_256',@Clave))
+	go
+	---Procedimineto Actualizar---
+	create procedure Usuario_Actualizar
+	@idUsuario Integer, 
+	@idRol integer,
+	@Nombre varchar(100),
+	@Tipo_Documento varchar(20),
+	@Numero_Documento varchar(20),
+	@Direccion varchar(70),
+	@Telefono varchar(20),
+	@Email varchar(50),
+	@Clave varchar(50)
+	as 
+	if @Clave<>''
+	Update usuario set 
+	idrol=@idRol, 
+	nombre = @Nombre, 
+	tipo_documento = @Tipo_Documento,
+	num_documento=@Numero_Documento,
+	direccion=@Direccion,
+	telefono=@Telefono,
+	email=@Email,
+	clave=HASHBYTES('SHA2_256',@Clave)
+	Where id_usuario = @idUsuario
+	else
+	Update usuario set 
+	idrol=@idRol, 
+	nombre = @Nombre, 
+	tipo_documento = @Tipo_Documento,
+	num_documento=@Numero_Documento,
+	direccion=@Direccion,
+	telefono=@Telefono,
+	email=@Email
+	where id_usuario = @idUsuario
+	go
+	---Procedimineto Eliminar---
+	create procedure Eliminar_Usuario
+	@Id_Usuario integer
+	as
+	Delete  from usuario where id_usuario=@Id_Usuario
+	go
+	---Procedimineto Desactivar---
+	create procedure Desactivar_Usuario
+	@Id_Usuario Integer
+	as 
+	Update usuario set estado=0 where id_usuario = @Id_Usuario
+	go
+	---Procedimineto Activar---
+	create procedure Activar_Usuario
+	@Id_Usuario Integer
+	as 
+	Update usuario set estado=1 where id_usuario = @Id_Usuario
+	go
+	---Procedimiento Existe---
+
+	create procedure usuario_existe
+	@valor varchar(100),
+	@existe bit output 
+	as
+		if exists (select email from usuario where email = ltrim(trim(@valor)))
+			begin
+				set @existe=1
+			end
+		else
+			begin 
+				set @existe=0
+			end
+
+
+			Select * from usuario
+
+------Procedimiento almacenado Usuario Login-----------
+go
+create procedure usuario_login 
+@email varchar(50),
+@clave varchar(50)
+as
+select u.id_usuario, u.idrol, r.nombre as Rol, u.nombre, u.estado  
+from usuario u inner join rol r on u.idrol = r.id_rol
+where u.email = @email and u.clave = HASHBYTES('SHA2_256', @clave)
+go
