@@ -463,12 +463,10 @@ else
 			begin 
 				set @existe=0
 			end
-
-
-			Select * from usuario
+go
 
 ------Procedimiento almacenado Usuario Login-----------
-go
+
 create procedure usuario_login 
 @email varchar(50),
 @clave varchar(50)
@@ -477,4 +475,143 @@ select u.id_usuario, u.idrol, r.nombre as Rol, u.nombre, u.estado
 from usuario u inner join rol r on u.idrol = r.id_rol
 where u.email = @email and u.clave = HASHBYTES('SHA2_256', @clave)
 go
+
+-----Procedimientos almacenados Personas (Clientes o Proveedores)-----
+
+--Procedimiento Listar--
+create  procedure Persona_Listar
+as
+select idpersona as ID, 
+tipo_persona as Tipo_Persona, 
+nombre as Nombre, 
+tipo_documento as  Tipo_Documento,
+num_documento as Documento,
+direccion as Direccion,
+talefono as Telefono ,email as Email from persona order by idpersona desc
+go
+
+
+--Procedimiento Listar Proveedor--
+create procedure Persona_Listar_Proveedores
+as
+select idpersona as ID, 
+tipo_persona as Tipo_Persona, 
+nombre as Nombre, 
+tipo_documento as  Tipo_Documento,
+num_documento as Documento,
+direccion as Direccion,
+talefono as Telefono,
+email as Email from persona where tipo_persona='Proveedor' order by idpersona desc
+go
+
+
+--Procedimineto Listar Clientes--
+create procedure Persona_Listar_Clientes
+as
+select idpersona as ID, 
+tipo_persona as Tipo_Persona, 
+nombre as Nombre, 
+tipo_documento as  Tipo_Documento,
+num_documento as Documento,
+direccion as Direccion,
+talefono as Telefono,
+email as Email from persona where tipo_persona='Clientes' order by idpersona desc
+go
+--Procedimiento Buscar--
+create procedure Persona_Buscar
+@Valor Varchar(50)
+as
+select idpersona as ID, 
+tipo_persona as Tipo_Persona, 
+nombre as Nombre, 
+tipo_documento as  Tipo_Documento,
+num_documento as Documento,
+direccion as Direccion,
+talefono as Telefono,
+email as Email from  persona
+where nombre like '%' + @Valor + '%' Or email like '%' + @valor + '%'
+order by nombre asc
+go
+--Procedimineto Buscar Proveedores--
+create procedure Persona_Buscar_Proveedores
+@Valor Varchar(50)
+as
+select idpersona as ID, 
+tipo_persona as Tipo_Persona, 
+nombre as Nombre, 
+tipo_documento as  Tipo_Documento,
+num_documento as Documento,
+direccion as Direccion,
+talefono as Telefono,
+email as Email from  persona
+where (nombre like '%' + @Valor + '%' Or email like '%' + @valor + '%') and tipo_persona='Proveedor'
+order by nombre asc
+go
+--Procedimiento Buscar Cliente--
+create procedure Persona_Buscar_Clientes
+@Valor Varchar(50)
+as
+select idpersona as ID, 
+tipo_persona as Tipo_Persona, 
+nombre as Nombre, 
+tipo_documento as  Tipo_Documento,
+num_documento as Documento,
+direccion as Direccion,
+talefono as Telefono,
+email as Email from  persona
+where (nombre like '%' + @Valor + '%' Or email like '%' + @valor + '%') and tipo_persona='Clientes'
+order by nombre asc
+go
+
+--Procedimiento Insertar--
+create procedure persona_insertar
+@tipo_persona varchar(20),
+@Nombre varchar(100),
+@tipo_documento varchar(20),
+@num_documento varchar(20),
+@direccion varchar(70),
+@telefono varchar(20),
+@email varchar(50)
+as 
+insert into persona (tipo_persona,nombre,tipo_documento,num_documento,direccion,talefono,email) values
+(@tipo_persona,@Nombre,@tipo_documento,@num_documento,@direccion,@telefono,@email)
+go
+
+--Procedimiento Actualizar--
+create procedure persona_Actualizar
+@idpersona integer,
+@tipo_persona varchar(20),
+@Nombre varchar(100),
+@tipo_documento varchar(20),
+@num_documento varchar(20),
+@direccion varchar(70),
+@telefono varchar(20),
+@email varchar(50)
+as
+update persona set tipo_persona=@tipo_persona, nombre=@Nombre, tipo_documento=@tipo_documento,num_documento= @num_documento,direccion=@direccion, 
+talefono = @telefono , email = @email where idpersona = @idpersona
+go
+--Procedimiento Eliminar--
+create procedure persona_Eliminar
+
+@idPersona integer
+as 
+delete  from persona where idpersona = @idPersona
+go
+
+--Procedimiento Existe--
+create procedure persona_Existe
+@valor varchar(100),
+@existe bit output
+as
+		if exists (select nombre from persona where nombre = ltrim(trim(@valor)))
+			begin
+				set @existe=1
+			end
+		else
+			begin 
+				set @existe=0
+			end
+go
+
 

@@ -182,5 +182,19 @@ namespace Sistema.Presentacion
              Application.Exit();
             }
         }
+
+        private void provedoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmProveedor frm = new FrmProveedor();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void clientesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmCliente frm = new FrmCliente();
+            frm.MdiParent = this;
+            frm.Show();
+        }
     }
 }

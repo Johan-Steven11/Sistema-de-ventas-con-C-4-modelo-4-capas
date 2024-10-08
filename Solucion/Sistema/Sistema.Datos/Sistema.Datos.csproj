@@ -45,6 +45,7 @@
     <Compile Include="Conexion2.cs" />
     <Compile Include="DArticulo.cs" />
     <Compile Include="DCategoria.cs" />
+    <Compile Include="DPersona.cs" />
     <Compile Include="DRol.cs" />
     <Compile Include="DUsuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

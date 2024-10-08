@@ -249,8 +249,6 @@ namespace Sistema.Datos
 
         }
         #endregion
-
-
         #region Login
         public DataTable Login(string Email, string Clave)
         {
